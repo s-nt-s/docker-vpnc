@@ -66,3 +66,7 @@ Host trb
 y cuando queramos entrar a la máquina `10.2.42.162`, que es solo accesible a
 través de la VPN, nos bastara con hacer `ssh trb` para entrar sin que ninguna
 otra conexión de nuestro equipo se vea afectada por la VPN.
+
+
+Nota: Si se quiere usar un puerto distinto a 52022 hay que editar `./img.sh`
+y `~/.ssh/config`
