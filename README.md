@@ -55,7 +55,7 @@ Como ejemplo, podemos configurar muestro `~/.ssh/config` de esta manera:
 ```
 Host docker-vpnc
     HostName localhost
-    User root
+    User vpnc
     Port 52022
     IdentityFile ~/.ssh/docker-vpnc
 

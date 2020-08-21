@@ -11,14 +11,15 @@ if [[ $(/usr/bin/id -u) -ne 0 ]]; then
 fi
 
 if [ "$1" == "--rm" ]; then
+  if [ -f "$ENLACE" ]; then
+    systemctl stop "$SYS_NAME"
+    systemctl disable "$SYS_NAME"
+    rm "$ENLACE"
+  fi
   docker container stop "${SYS_NAME}"
   docker container rm "${SYS_NAME}"
   docker image rm "${SYS_NAME}"
   docker system prune --force
-  if [ -f "$ENLACE" ]; then
-    systemctl disable "$SYS_NAME"
-    rm "$ENLACE"
-  fi
   exit 0
 fi
 
@@ -69,3 +70,4 @@ ls -l "$ENLACE"
 echo "Falta habilitarlo e iniciarlo:"
 echo "  sudo systemctl daemon-reload"
 echo "  sudo systemctl enable ${SYS_NAME}.service"
+echo "  sudo systemctl start ${SYS_NAME}.service"
