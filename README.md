@@ -40,7 +40,7 @@ $ cp ~/.ssh/docker-vpnc.pub config/authorized_keys
 
 ## Instalar imagen y servicio
 
-Para crear la imagen y arrancada:
+Para crear la imagen y arrancarla:
 
 ```
 $ sudo ./install.sh
