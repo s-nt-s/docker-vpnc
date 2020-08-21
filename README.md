@@ -24,7 +24,8 @@ queremos poder conectar a la máquina docker
 * `init.sh` es el script que arrancara el servidor SSH y conectara la VPNC
 al arrancar la imagen docker
 * `Dockerfile` es la definición de nuestra imagen docker
-* `img.sh` es un pequeño script para manejar la imagen
+* `install.sh` es un pequeño script que crea una imagen y configura un servicio
+`systemd` para manejarla
 
 # Pasos
 
@@ -35,18 +36,17 @@ $ ssh-keygen -t rsa -f ~/.ssh/docker-vpnc -C "docker-vpnc"
 $ cp ~/.ssh/docker-vpnc.pub config/authorized_keys
 ```
 
-Para manejar la imagen tenemos:
-
-* `./img.sh --build`: Crea la imagen
-* `./img.sh --run`: Arranca la imagen
-* `./img.sh --ssh`: Nos introduce en la imagen vía ssh
-* `./img.sh --stop`: Para la imagen
-* `./img.sh --rm`: Borra la imagen
-
 # Configurar ~/.ssh/config
 
-Una vez que tengamos nuestra imagen arrancada, podemos configurar muestro
-`~/.ssh/config` de esta manera:
+Una vez que tengamos nuestra imagen creada y arrancada:
+
+```
+$ sudo ./install.sh
+$ sudo systemctl daemon-reload
+$ sudo systemctl start dvpnc.service
+```
+
+podemos configurar muestro `~/.ssh/config` de esta manera:
 
 ```
 Host docker-vpnc
@@ -55,18 +55,23 @@ Host docker-vpnc
     Port 52022
     IdentityFile ~/.ssh/docker-vpnc
 
-Host trb
+Host in
     HostName 10.2.42.162
-    IdentityFile ~/.ssh/trb
+    IdentityFile ~/.ssh/in
     User myuser
-    Port 443
     ProxyJump docker-vpnc
+
+Host out
+    HostName 10.2.42.162
+    IdentityFile ~/.ssh/out
+    User myuser
 ```
 
-y cuando queramos entrar a la máquina `10.2.42.162`, que es solo accesible a
-través de la VPN, nos bastara con hacer `ssh trb` para entrar sin que ninguna
-otra conexión de nuestro equipo se vea afectada por la VPN.
+y cuando queramos entrar a la máquina `10.2.42.162` que es solo accesible a
+través de la VPN nos bastara con hacer `ssh in`, mientras que si queremos
+entrar en la máquina `10.2.42.162` que esta fuera de la VPN podremos hacer
+`ssh out`. Así ambas máquinas serán accesibles a la vez.
 
 
-Nota: Si se quiere usar un puerto distinto a 52022 hay que editar `./img.sh`
+Nota: Si se quiere usar un puerto distinto a `52022` hay que editar `./install.sh`
 y `~/.ssh/config`
