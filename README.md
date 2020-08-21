@@ -29,6 +29,8 @@ al arrancar la imagen docker
 
 # Pasos
 
+## Clave SSH
+
 Para crear la clave ssh podemos hacer:
 
 ```
@@ -36,9 +38,9 @@ $ ssh-keygen -t rsa -f ~/.ssh/docker-vpnc -C "docker-vpnc"
 $ cp ~/.ssh/docker-vpnc.pub config/authorized_keys
 ```
 
-# Configurar ~/.ssh/config
+## Instalar imagen y servicio
 
-Una vez que tengamos nuestra imagen creada y arrancada:
+Para crear la imagen y arrancada:
 
 ```
 $ sudo ./install.sh
@@ -46,7 +48,9 @@ $ sudo systemctl daemon-reload
 $ sudo systemctl start dvpnc.service
 ```
 
-podemos configurar muestro `~/.ssh/config` de esta manera:
+## Ejemplo de uso (~/.ssh/config)
+
+Como ejemplo, podemos configurar muestro `~/.ssh/config` de esta manera:
 
 ```
 Host docker-vpnc
@@ -71,7 +75,6 @@ y cuando queramos entrar a la máquina `10.2.42.162` que es solo accesible a
 través de la VPN nos bastara con hacer `ssh in`, mientras que si queremos
 entrar en la máquina `10.2.42.162` que esta fuera de la VPN podremos hacer
 `ssh out`. Así ambas máquinas serán accesibles a la vez.
-
 
 Nota: Si se quiere usar un puerto distinto a `52022` hay que editar `./install.sh`
 y `~/.ssh/config`
