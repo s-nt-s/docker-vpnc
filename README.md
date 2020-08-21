@@ -22,7 +22,7 @@ u otra alternativa.
 * `config/authorized_keys` debe incluir la clave pública con la que nos
 queremos poder conectar a la máquina docker
 * `init.sh` es el script que arrancara el servidor SSH y conectara la VPNC
-al arrancar la imagen docker
+al iniciar la imagen docker
 * `Dockerfile` es la definición de nuestra imagen docker
 * `install.sh` es un pequeño script que crea una imagen y configura un servicio
 `systemd` para manejarla
