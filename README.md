@@ -12,7 +12,7 @@ de manera que podamos hacer conexiones a través de la imagen solo cuando nos
 interese ir a través de la VPN.
 
 Nota: Este desarrollo esta montado sobre VPNC (Cisco VPN) porque es lo que
-actualmente uso, pero sería fácilmente modificable para usar con OpenVPN
+actualmente tengo que usar en el curro, pero sería fácilmente modificable para usar con OpenVPN
 u otra alternativa.
 
 # Piezas
