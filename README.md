@@ -17,9 +17,8 @@ u otra alternativa.
 
 # Piezas
 
-* `config/default.conf` debe contener la configuración de nuestra VPNC
-(ver plantilla en [`config/default.example.conf`](config/default.example.conf))
-* `config/authorized_keys` debe incluir la clave pública con la que nos
+* [`config/default.conf`](config/default.example.conf) debe contener la configuración de nuestra VPNC
+* [`config/authorized_keys`](config/authorized_keys.example) debe incluir la clave pública con la que nos
 queremos poder conectar a la máquina docker
 * [`config/init.sh`](config/init.sh) es el script que arrancara el servidor SSH y conectara la VPNC
 al iniciar la imagen docker
