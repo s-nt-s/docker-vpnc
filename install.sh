@@ -23,6 +23,8 @@ if [ "$1" == "--rm" ]; then
   exit 0
 fi
 
+set -e
+
 cd "$(dirname "$0")"
 
 if [ ! -f "config/authorized_keys" ]; then
