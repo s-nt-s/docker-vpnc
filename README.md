@@ -3,15 +3,22 @@
 Necesitamos pasar por una VPN para acceder a algunos servicios, pero para el
 resto de nuestras conexiones queremos evitar dicha VPN.
 
-Una posible solución seria usar [IPTABLES con discriminación por usuario](https://www.niftiestsoftware.com/2011/08/28/making-all-network-traffic-for-a-linux-user-use-a-specific-network-interface/)
+Una posible solución sería usar [IPTABLES con discriminación por usuario](https://www.niftiestsoftware.com/2011/08/28/making-all-network-traffic-for-a-linux-user-use-a-specific-network-interface/)
 pero puede resultar demasiado complejo.
 
-Por ello aquí se presenta una alternativa que consiste en crear una imagen
-docker con un servidor SSH levantado y con la VPN configurada y activada
-de manera que podamos hacer conexiones a través de la imagen solo cuando nos
-interese ir a través de la VPN.
+Por ello aquí se presenta una alternativa que consiste en crear una imagen docker
+con la VPN configurada y que nos ofrece:
 
-Nota: Este desarrollo esta montado sobre VPNC (Cisco VPN) porque es lo que
+* un servidor `ssh` escuchando en `52022`
+* un `proxy socks` escuchando en `52024`
+
+De manera que podremos:
+
+* hacer `ssh` a una máquina de la VPN mediante `ProxyJump` sobre `localhost:52022`
+* navegar como si estuvieramos en la VPN configurando como proxy `localhost:52024`
+* cualquier cosa que se nos ocurra a través de túneles `ssh`
+
+Nota: Este desarrollo está montado sobre VPNC (Cisco VPN) porque es lo que
 actualmente tengo que usar en el curro, pero sería fácilmente modificable para usar con OpenVPN
 u otra alternativa.
 
@@ -23,10 +30,9 @@ queremos poder conectar a la máquina docker
 * [`config/init.sh`](config/init.sh) es el script que arrancara el servidor SSH y conectara la VPNC
 al iniciar la imagen docker
 * [`Dockerfile`](Dockerfile) es la definición de nuestra imagen docker
-* [`install.sh`](install.sh) es un pequeño script que crea una imagen y configura un servicio
-`systemd` para manejarla
+* [`install.sh`](install.sh) es un pequeño script que crea una imagen y configura un servicio `systemd` para manejarla
 
-# Pasos
+# Uso
 
 ## Clave SSH
 
@@ -75,5 +81,13 @@ través de la VPN nos bastara con hacer `ssh in`, mientras que si queremos
 entrar en la máquina `10.2.42.162` que esta fuera de la VPN podremos hacer
 `ssh out`. Así ambas máquinas serán accesibles a la vez.
 
-Nota: Si se quiere usar un puerto distinto a `52022` hay que editar `./install.sh`
-y `~/.ssh/config`
+## Ejemplo proxy
+
+```console
+$ curl -x socks5h://localhost:52024 https://intranet.example.com/
+```
+
+# Cambiar puertos
+
+Para cambiar los puertos de escucha se puede modificar el fichero `./install.sh`
+antes de lanzarlo.

@@ -1,2 +1,4 @@
+.idea
+.env
 config/default.conf
 config/authorized_keys

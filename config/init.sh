@@ -1,3 +1,4 @@
 #!/bin/sh
-/usr/sbin/sshd -D &
-/usr/sbin/vpnc default --no-detach --non-inter
+/usr/sbin/sshd
+/usr/sbin/vpnc default --non-inter --pid-file /var/run/vpnc.pid
+/usr/sbin/sockd

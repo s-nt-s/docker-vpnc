@@ -1,6 +1,7 @@
 #!/bin/bash
 
 SSH_PORT="52022"
+SCK_PORT="52024"
 SYS_NAME="dvpnc"
 
 ENLACE="/etc/systemd/system/$SYS_NAME.service"
@@ -25,7 +26,8 @@ fi
 
 set -e
 
-cd "$(dirname "$0")"
+DROOT="$(realpath "$(dirname "$0")")/"
+cd "$DROOT"
 
 if [ ! -f "config/authorized_keys" ]; then
   echo "Falta el fichero config/authorized_keys"
@@ -58,7 +60,7 @@ Requires=docker.socket
 
 [Service]
 Restart=always
-ExecStartPre=/bin/bash -c "/usr/bin/docker container inspect ${SYS_NAME} 2> /dev/null || /usr/bin/docker run --privileged -p ${SSH_PORT}:22 -d -P --name ${SYS_NAME} ${SYS_NAME}"
+ExecStartPre=/bin/bash -c "/usr/bin/docker container inspect ${SYS_NAME} 2> /dev/null || /usr/bin/docker run --privileged -p ${SSH_PORT}:22 -p ${SCK_PORT}:1080 -d -P --name ${SYS_NAME} ${SYS_NAME}"
 ExecStart=/usr/bin/docker start -a ${SYS_NAME}
 ExecStop=/usr/bin/docker stop -t 10 ${SYS_NAME}
 
