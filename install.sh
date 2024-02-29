@@ -38,6 +38,14 @@ fi
 
 if ! docker image inspect "${SYS_NAME}:latest" >/dev/null 2>&1; then
   docker build -t "${SYS_NAME}" .
+  for h in /home/* /root; do
+  kh="$h/.ssh/known_hosts"
+  if [ -f "$kh" ]; then
+  kh_owner=$(stat -c %U "$h/.ssh/known_hosts")
+  kh_group=$(stat -c %G "$h/.ssh/known_hosts")
+  sudo -u $kh_owner -g $kh_group ssh-keygen -q -f "$kh" -R "[127.0.0.1]:$SSH_PORT"
+  fi
+  done
 fi
 
 if [ -e "$ENLACE" ]; then
