@@ -9,18 +9,21 @@ COPY config/authorized_keys /home/vpnc/.ssh/
 
 RUN \
 apk update && \
-apk add --no-cache openssh-server vpnc && \
+apk add --no-cache openssh-server vpnc sudo && \
 sed -E 's|^#?AllowTcpForwarding.*|AllowTCPForwarding yes|g' -i /etc/ssh/sshd_config && \
 sed -E 's|^#?ChallengeResponseAuthentication.*|ChallengeResponseAuthentication no|g' -i /etc/ssh/sshd_config && \
 sed -E 's|^#?PasswordAuthentication.*|PasswordAuthentication no|g' -i /etc/ssh/sshd_config && \
 adduser --disabled-password --home /home/vpnc vpnc && \
 mkdir -p /home/vpnc/.ssh/ && \
-chmod +x /root/init.sh && \
+chmod 700 /root/init.sh && \
 chmod 600 /home/vpnc/.ssh/authorized_keys && \
 chown vpnc:vpnc -R /home/vpnc/ && \
 sed 's|^vpnc:!:|vpnc:*:|' -i /etc/shadow && \
 /usr/bin/ssh-keygen -A && \
+echo "vpnc ALL=(ALL) NOPASSWD: /root/init.sh" >> /etc/sudoers && \
+apk --purge del apk-tools && \
 rm -rf /var/cache/apk/* /var/log/* /var/lib/apt/lists/*
 
+USER vpnc
 EXPOSE 22
-ENTRYPOINT ["/bin/sh", "/root/init.sh"]
+ENTRYPOINT ["sudo", "/root/init.sh"]
