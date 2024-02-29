@@ -13,6 +13,9 @@ apk add --no-cache openssh-server vpnc sudo && \
 sed -E 's|^#?AllowTcpForwarding.*|AllowTCPForwarding yes|g' -i /etc/ssh/sshd_config && \
 sed -E 's|^#?ChallengeResponseAuthentication.*|ChallengeResponseAuthentication no|g' -i /etc/ssh/sshd_config && \
 sed -E 's|^#?PasswordAuthentication.*|PasswordAuthentication no|g' -i /etc/ssh/sshd_config && \
+sed -E 's|\s\s*| |g' -i /etc/ssh/sshd_config && \
+sed -E '/^#/d' -i /etc/ssh/sshd_config && \
+sed -E '/^\s*$/d' -i /etc/ssh/sshd_config && \
 adduser --disabled-password --home /home/vpnc vpnc && \
 mkdir -p /home/vpnc/.ssh/ && \
 chmod 700 /root/init.sh && \
